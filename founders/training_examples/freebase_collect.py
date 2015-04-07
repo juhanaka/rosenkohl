@@ -1,3 +1,5 @@
+# Usage: python freebase_collect [api_key_filepath] [companies_filepath]
+
 import sys
 import json
 from sets import Set
@@ -11,10 +13,12 @@ if len(sys.argv) < 3:
     print 'Usage: python freebase_collect [api_key_filepath] [companies_filepath]'
     exit()
 
+# Read API key from provided path
 with open(sys.argv[1]) as fp:
     api_key = fp.readline().strip()
 
 companies = []
+# Read companies from provided path
 with open(sys.argv[2]) as fp:
     for line in fp:
         companies.append(line.strip())
@@ -27,6 +31,7 @@ if sys.stdin.read(1).lower() != 'y':
 service = build('freebase', 'v1', developerKey=api_key)
 batch = BatchHttpRequest()
 
+# Cryptic query freebase relation query ids
 founders_query_id = '/organization/organization/founders'
 board_members_query_id = '/organization/organization/board_members./organization/organization_board_membership/member'
 leadership_query_id = '/organization/organization/leadership./organization/leadership/person'
@@ -56,6 +61,7 @@ def handle_company(request_id, response, exception):
 
     founders = [person['name'] for person in result['output'][founders_query_id][founders_query_id]]
     others = []
+    # Sometimes it seems that name is not found on a person, if so - discard
     try:
         if leadership_query_id.split('.')[1] in result['output'][leadership_query_id]:
             others += map(lambda person: person['name'], result['output'][leadership_query_id][leadership_query_id.split('.')[1]])
@@ -71,6 +77,8 @@ def handle_company(request_id, response, exception):
     write_to_file(result['name'], positive_names, 1)
     write_to_file(result['name'], negative_names, 0)
 
+# go through all companies and batch the requests into one request. For each response, call the
+# handle_company function
 for company in companies:
     batch.add(service.search(query=company, output=output), callback=handle_company)
 
