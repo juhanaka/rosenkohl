@@ -11,8 +11,7 @@ def retrieve_key():
 
 def get_examples(filename_examples):
     # retrieve API key
-    #key = retrieve_key()
-    key = '84d68769d2c83a7889ba864594d00e81'
+    key = retrieve_key()
     cb = pycrunchbase.CrunchBase(key)
     pos_ex = {}
     neg_ex ={}
