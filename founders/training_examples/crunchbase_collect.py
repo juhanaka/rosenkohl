@@ -1,6 +1,6 @@
 import pycrunchbase
 
-KEY_PATH = '~/Desktop/Research/Wikipedia/API\ keys/crunchbase'
+KEY_PATH = '/Users/toto2/Desktop/Research/Wikipedia/API keys/crunchbase'
 FILENAME = 'crunchbase_examples'
 
 def retrieve_key():
