@@ -1,3 +1,4 @@
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -5,7 +6,7 @@ __pycache__/
 # C extensions
 *.so
 
-/Users/juhanakangaspunta/stanford/cs341/rosenkohl/founders/list_of_companies/data
+founders/list_of_companies/data
 # Distribution / packaging
 .Python
 env/
