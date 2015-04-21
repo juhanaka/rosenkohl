@@ -33,7 +33,7 @@ def get_ids(input_filename,output_filename='ids_1',limited=0):
 def write_out(output_filename,data):
     with open(output_filename,"a") as f:
         for i,line in enumerate(data):
-	    id = line[0]
+            id = line[0]
             f.write(str(id)+"\n")
 # initialize the file ids
 open('ids_1', 'w').close()
