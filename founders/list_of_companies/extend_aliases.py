@@ -30,3 +30,6 @@ def extend_examples(example_filename,aliases_filename,output_filename='examples_
                     print new_line
                     output.write('\t'.join(new_line)+'\n')
     output.close()
+
+
+extend_examples('data/training-data.tsv','data/aliases.tsv')
