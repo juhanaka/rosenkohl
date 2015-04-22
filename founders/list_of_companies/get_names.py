@@ -1,6 +1,6 @@
 import json
 
-WIKIDATA_IDS_PATH = 'data/wikidata_ids'
+WIKIDATA_IDS_PATH = 'wikidata_ids'
 DATA_PATH = '/Volumes/Juhana_Ext/cs341data/'
 LANG = 'en'
 
