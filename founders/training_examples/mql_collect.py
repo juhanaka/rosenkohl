@@ -30,23 +30,25 @@ def handle_company(result):
     founders = result['founders']
     if not founders:
         return
-    employees = [x['person'] for x in result['/business/employer/employees']]
-    board_members = [x['person'] for x in result['board_members']]
-    others = employees + board_members
+    for name in [result['name']] + result['/common/topic/alias']:
+        employees = [x['person'] for x in result['/business/employer/employees']]
+        board_members = [x['person'] for x in result['board_members']]
+        others = employees + board_members
 
-    positive_names = Set(founders)
-    negative_names = Set(others).difference(positive_names)
+        positive_names = Set(founders)
+        negative_names = Set(others).difference(positive_names)
 
-    write_to_file(result['name'], positive_names, 1)
-    write_to_file(result['name'], negative_names, 0)
+        write_to_file(name, positive_names, 1)
+        write_to_file(name, negative_names, 0)
 
 service_url = 'https://www.googleapis.com/freebase/v1/mqlread'
 query = [{'id': None,
           'name': None,
+          '/common/topic/alias': [],
           'founders':[],
           'board_members':[{'person': None}],
           '/business/employer/employees': [{'person': None}],
-          'type': '/business/business_operation'}]
+          'type': '/organization/organization'}]
 
 params = {
         'query': json.dumps(query),
@@ -65,5 +67,3 @@ while 'cursor' in response and 'result' in response:
     params['cursor'] = response['cursor']
     url = service_url + '?' + urllib.urlencode(params)
     response = json.loads(urllib.urlopen(url).read())
-
-
