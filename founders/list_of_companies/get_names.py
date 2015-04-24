@@ -1,6 +1,6 @@
 import json
 
-WIKIDATA_IDS_PATH = 'wikidata_ids'
+WIKIDATA_IDS_PATH = 'wikidata_ids_entrepreneurs'
 DATA_PATH = '/Volumes/Juhana_Ext/cs341data/'
 LANG = 'en'
 
@@ -31,8 +31,8 @@ def parse_json(line,label_fp, alias_fp):
 
 
 with open(DATA_PATH + '/wikidata_dump.json', 'r') as f, \
-    open('names.tsv', 'w') as label_fp, \
-    open('aliases.tsv', 'w') as alias_fp:
+    open('names_entrepreneurs.tsv', 'w') as label_fp, \
+    open('aliases_entrepreneurs.tsv', 'w') as alias_fp:
 
     for i, line in enumerate(f):
         line = line.rstrip()
