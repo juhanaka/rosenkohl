@@ -26,9 +26,9 @@ ghead -n -0 founder_company.tsv | psql -d deepdive_founder -c "copy founder_comp
 psql -d deepdive_founder -c \
 """
 INSERT INTO founder_sentences
-SELECT founder, 
-       company, 
-       sentence,
+SELECT founder_company.founder, 
+       founder_company.company, 
+       sentences.sentence,
        sentences.sentence_id
 FROM founder_company, 
      people_mentions,
