@@ -18,7 +18,9 @@ CREATE TABLE is_founder_interesting_companies(
   description text,
   is_true boolean,
   relation_id text, -- unique identifier for is_founder
-  id bigint 
+  id bigint, 
+  category bigint,
+  expectation double precision
 );
 """
 
@@ -29,14 +31,16 @@ psql -d deepdive_founder -c \
 INSERT INTO is_founder_interesting_companies
 SELECT DISTINCT person_id,
        company_id,
-       is_founder.sentence_id,
+       is_founder_is_true_inference.sentence_id,
        description,
        is_true,
        relation_id, -- unique identifier for is_founder
-       id 
-FROM is_founder,
+       id,
+       category, 
+       expectation
+FROM is_founder_is_true_inference,
      list_companies,
      company_mentions
-WHERE is_founder.company_id = company_mentions.mention_id
+WHERE is_founder_is_true_inference.company_id = company_mentions.mention_id
 AND   lower(company_mentions.text) = lower(list_companies.company);
 """
