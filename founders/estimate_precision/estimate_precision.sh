@@ -11,6 +11,10 @@ if psql -lqt | cut -d \| -f 1 | grep -w $DBNAME; then
     createdb $DBNAME
 fi
 
+psql -d $DBNAME -c "drop table if exists permanent_tags_founder_precision_is_correct;"
+
+psql -d $DBNAME < permanent_tags_founder_precision_is_correct.sql
+
 if [ -f "$file_name" ]
   then
     perl -pi -e 's/tags_founder-precision_with_features_is_correct/tags_founder_precision_with_features_is_correct/' tags.sql
@@ -57,3 +61,5 @@ WHERE permanent_tags_founder_precision_is_correct.sentence_id= f.sentence_id
 AND   permanent_tags_founder_precision_is_correct.description = f.description
 LIMIT 1);
 """
+
+pg_dump deepdive_founder -t permanent_tags_founder_precision_is_correct > permanent_tags_founder_precision_is_correct.sql
