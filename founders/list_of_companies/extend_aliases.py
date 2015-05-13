@@ -32,4 +32,20 @@ def extend_examples(example_filename,aliases_filename,output_filename='examples_
     output.close()
 
 
-extend_examples('data/training-data.tsv','data/aliases.tsv')
+#extend_examples('data/names.tsv','data/aliases.tsv')
+
+def write_everything(example_filename,aliases_filename,output_filename='names_with_aliases'):
+    names = set()
+    with open(example_filename) as f:
+        for i, line in enumerate(f):
+            names.add(line.rstrip())
+    with open(aliases_filename) as f:
+        for i,line in enumerate(f):
+            line = line.split('\t')
+            names.add(line[0])
+            names.add(line[1].rstrip())
+    with open(output_filename,'w') as out:
+        for name in names:
+            out.write(name+'\n')
+
+write_everything('data/names.tsv','data/aliases.tsv')
