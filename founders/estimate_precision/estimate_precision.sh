@@ -57,5 +57,3 @@ WHERE permanent_tags_founder_precision_is_correct.sentence_id= f.sentence_id
 AND   permanent_tags_founder_precision_is_correct.description = f.description
 LIMIT 1);
 """
-
-psql -d $DBNAME -c """select count(*) from is_founder;"""
