@@ -35,6 +35,8 @@ ALTER TABLE permanent_tags_founder_precision_is_correct OWNER TO thomaspalomares
 --
 
 COPY permanent_tags_founder_precision_is_correct (relation_id, sentence_id, is_correct, description, expectation) FROM stdin;
+869886@22_7-869886@22_0	869886@22	\N	Charles Lieber-Nanosys	0.949999999999999956
+15035566@3_8-15035566@3_0	15035566@3	true	Joe Kiani-Masimo	0.94399999999999995
 19463608@5_19-19463608@5_0	19463608@5	\N	Bob-R/GA	0.861999999999999988
 7213082@1_14-7213082@1_0	7213082@1	true	Mike Barta-Callisto Corporation	0.969999999999999973
 1929708@1_13-1929708@1_0	1929708@1	true	Frank Hornby-Meccano Ltd	0.827999999999999958
@@ -411,7 +413,6 @@ COPY permanent_tags_founder_precision_is_correct (relation_id, sentence_id, is_c
 27079451@1_13-27079451@1_0	27079451@1	\N	Leon Huyghe-Huyghe Brewery	0.825999999999999956
 10505371@1_62-10505371@1_0	10505371@1	\N	Jerry Moyes-Knight Transportation	\N
 19629560@1_32-19629560@1_0	19629560@1	\N	William Procter-Procter & Gamble	0.955999999999999961
-869886@22_7-869886@22_0	869886@22	\N	Charles Lieber-Nanosys	0.949999999999999956
 510609@1_25-510609@1_18	510609@1	\N	Tim Bevan-Universal Studios	\N
 2465976@1_16-2465976@1_0	2465976@1	\N	Bob Simpson-Micro Power	0.894000000000000017
 32541850@3_13-32541850@3_0	32541850@3	\N	Albert Imperato-21C Media Group	0.904000000000000026
@@ -557,7 +558,6 @@ COPY permanent_tags_founder_precision_is_correct (relation_id, sentence_id, is_c
 12529306@1_23-12529306@1_0	12529306@1	true	Henk Pander-Pander & Son	0.92000000000000004
 31543806@6_7-31543806@6_0	31543806@6	true	Charles Lindgren-Swinerton Incorporated	\N
 9026648@4_12-9026648@4_1	9026648@4	true	Herbert Aynsley-Star China	\N
-15035566@3_8-15035566@3_0	15035566@3	true	Joe Kiani-Masimo	0.94399999999999995
 37877883@1_13-37877883@1_0	37877883@1	true	Nigel Henderson-Hammer Prints Limited	0.936000000000000054
 1352836@7_32-1352836@7_0	1352836@7	false	Perkins Coie-Intellectual Ventures	0.916000000000000036
 18182838@9_9-18182838@9_2	18182838@9	false	Naruhiko Higashikuni-Institute of Technology	\N

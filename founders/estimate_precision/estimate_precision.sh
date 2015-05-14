@@ -63,3 +63,5 @@ LIMIT 1);
 """
 
 pg_dump deepdive_founder -t permanent_tags_founder_precision_is_correct > permanent_tags_founder_precision_is_correct.sql
+
+./create_graphs.sh
