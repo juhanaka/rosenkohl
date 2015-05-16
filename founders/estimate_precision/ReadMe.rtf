@@ -1,13 +1,11 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1347\cocoasubrtf570
-{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Menlo-Regular;}
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \margl1440\margr1440\vieww10800\viewh8400\viewkind0
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
 \f0\fs24 \cf0 To add a new file from Mindtag:\
-	- import the latest version with psql deepdive_founder < 
-\f1\fs22 \CocoaLigature0 permanent_tags_founder_precision_is_correct.sql
-\f0\fs24 \CocoaLigature1 \
+	- pull form git\
 	- export from Mintag	\
 	- add the tags description, sentences_id, relation_id and is_correct\
 	- choose the format insert.sql\
@@ -15,6 +13,4 @@
 		(not needed if you don\'92t have any other tags)\
 	- rename the file tags.sql and put it in this folder\
 	- run estimate_precision.sh\
-	- export in this folder with the command 
-\f1\fs22 \CocoaLigature0 pg_dump deepdive_founder -t permanent_tags_founder_precision_is_correct > permanent_tags_founder_precision_is_correct.sql\
-}
+	- push to git}
