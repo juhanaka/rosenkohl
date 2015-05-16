@@ -16,6 +16,8 @@ people_ids_set = set(people_ids)
 
 def parse_json(line,label_fp, alias_fp):
     obj = json.loads(line)
+    if not obj['id'].startswith('Q'):
+        return
     id_ = obj['id'][1:]
     label = None
 
