@@ -53,8 +53,8 @@ query = [{'id': None,
           '/common/topic/alias': [],
           'parents':[],
           'children':[],
-          'sibling_s':[{'person': None}],
-          'spouse_s': [{'person': None}],
+          'sibling_s':[],
+          'spouse_s': [],
           'type': '/people/person'}]
 
 params = {
@@ -65,7 +65,7 @@ params = {
 }
 url = service_url + '?' + urllib.urlencode(params)
 response = json.loads(urllib.urlopen(url).read())
-
+print response
 
 while 'cursor' in response and 'result' in response:
     for subject in response['result']:
