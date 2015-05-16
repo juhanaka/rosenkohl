@@ -1,7 +1,6 @@
 #! /usr/bin/env bash
 
 DBNAME=deepdive_founder
-threshold_expectation=0.9
 file_name=tags.sql
 
 if psql -lqt | cut -d \| -f 1 | grep -w $DBNAME; then
