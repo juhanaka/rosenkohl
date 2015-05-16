@@ -1,18 +1,10 @@
 import requests
 
-FILE_PATH = 'results/ppl_wikidata_ids'
+FILE_PATH = 'results/ppl_wikidata_ids.txt'
 BASE_URL = 'http://wdq.wmflabs.org/api?'
 
-query_string = '''q=CLAIM[31:783794]%20or%20\
-                  CLAIM[31:4830453]%20or%20\
-                  CLAIM[31:891723]%20or%20\
-                  CLAIM[31:161726]%20or%20\
-                  CLAIM[31:35127]%20or%20\
-                  CLAIM[31:355]%20or%20\
-                  CLAIM[31:3918]%20or%20\
-                  CLAIM[31:902104]%20or%20\
-                  CLAIM[31:79913]%20or%20\
-                  CLAIM[31:157031]%20and%20\
+query_string = '''q=CLAIM[31:5]%20and%20\
+                  CLAIM[21]%20and%20\
                   link[enwiki]'''
 
 r = requests.get(BASE_URL + query_string)
