@@ -19,4 +19,11 @@ do
   psql -d deepdive_founder -c "SELECT count(*) FROM is_founder_is_true_inference WHERE expectation > $i;" -t >> results.tsv
 done
 
+for i in "${array[@]}"
+do
+  psql -d deepdive_founder -c "SELECT count(*) FROM permanent_tags_founder_precision_is_correct WHERE expectation > $i and is_correct='true';" -t >> results.tsv
+done
+
+psql -d deepdive_founder -c "SELECT count(*) FROM permanent_tags_founder_precision_is_correct WHERE is_correct='true';" -t >> results.tsv
+
 ./calculus.py
