@@ -4,7 +4,6 @@ FILE_PATH = 'results/ppl_wikidata_ids.txt'
 BASE_URL = 'http://wdq.wmflabs.org/api?'
 
 query_string = '''q=CLAIM[31:5]%20and%20\
-                  CLAIM[21]%20and%20\
                   link[enwiki]'''
 
 r = requests.get(BASE_URL + query_string)
