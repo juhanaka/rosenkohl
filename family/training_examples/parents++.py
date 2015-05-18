@@ -36,10 +36,10 @@ def handle_parent(result):
     if not parents:
         return
     for name in [result['name']] + result['/common/topic/alias']:
-        siblings = [x['person'] for x in result['sibling_s']]
-        spouses = [x['person'] for x in result['spouse_s']]
+        siblings = [x['person'] for x in result['/people/sibling_relationship/sibling']]
+        #spouses = [x['spouse'] for x in result['spouse_s']]
         children = result['children']
-        others = siblings + spouses + children
+        others = siblings + children
 
         positive_names = Set(parents)
         negative_names = Set(others).difference(positive_names)
@@ -53,8 +53,8 @@ query = [{'id': None,
           '/common/topic/alias': [],
           'parents':[],
           'children':[],
-          'sibling_s':[],
-          'spouse_s': [],
+          '/people/sibling_relationship/sibling':[],
+          'spouse_s': [{'spouse':[]}],#[{'spouse': None}],
           'type': '/people/person'}]
 
 params = {
@@ -69,6 +69,7 @@ print response
 
 while 'cursor' in response and 'result' in response:
     for subject in response['result']:
+        print subject['/people/sibling_relationship/sibling']
         handle_parent(subject)
     print 'Fetching {0} people'.format(LIMIT)
     params['cursor'] = response['cursor']

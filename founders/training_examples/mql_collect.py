@@ -10,6 +10,11 @@ founders_query_id = '/organization/organization/founders'
 board_members_query_id = '/organization/organization/board_members./organization/organization_board_membership/member'
 leadership_query_id = '/organization/organization/leadership./organization/leadership/person'
 
+parents_query_id = '/people/person/parents'
+children_query_id = '/people/person/children'
+siblings_query_id = '/people/person/sibling_s'
+spouse_query_id = '/people/person/spouse_s'
+
 if len(sys.argv) < 2:
     print 'Usage: python mql_collect [api_key_filepath]'
     exit()
