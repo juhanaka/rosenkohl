@@ -3,17 +3,15 @@ import json
 import urllib
 from sets import Set
 
-OUTPUT_FNAME = 'freebase_output'
-LIMIT = 100
-output_fp = open(OUTPUT_FNAME, 'w')
-founders_query_id = '/organization/organization/founders'
-board_members_query_id = '/organization/organization/board_members./organization/organization_board_membership/member'
-leadership_query_id = '/organization/organization/leadership./organization/leadership/person'
-
-parents_query_id = '/people/person/parents'
-children_query_id = '/people/person/children'
-siblings_query_id = '/people/person/sibling_s'
-spouse_query_id = '/people/person/spouse_s'
+OUTPUT_FNAME_PAR = 'freebase_parents'
+OUTPUT_FNAME_CHI = 'freebase_children'
+OUTPUT_FNAME_SPO = 'freebase_spouse'
+OUTPUT_FNAME_SIB = 'freebase_siblings'
+LIMIT = 500
+output_fp_par = open(OUTPUT_FNAME_PAR, 'w')
+output_fp_chi = open(OUTPUT_FNAME_CHI, 'w')
+output_fp_spo = open(OUTPUT_FNAME_SPO, 'w')
+output_fp_sib = open(OUTPUT_FNAME_SIB, 'w')
 
 if len(sys.argv) < 2:
     print 'Usage: python mql_collect [api_key_filepath]'
@@ -23,38 +21,71 @@ if len(sys.argv) < 2:
 with open(sys.argv[1]) as fp:
     api_key = fp.readline().strip()
 
-def write_to_file(subject, people, label):
+def write_to_file(output, subject, people, label):
     for person in people:
         if person is None or subject is None:
             continue
-        output_fp.write('\t'.join([subject, person, str(label)]).encode('utf-8') + '\n')
+        output.write('\t'.join([subject, person, str(label)]).encode('utf-8') + '\n')
 
 # Callback to handle a single API response
-def handle_parent(result):
+def handle_result(result):
     # if founders not found, don't do anything
     parents = result['parents']
     if not parents:
         return
-    for name in [result['name']] + result['/common/topic/alias']:
-        siblings = [x['person'] for x in result['/people/sibling_relationship/sibling']]
-        #spouses = [x['spouse'] for x in result['spouse_s']]
-        children = result['children']
-        others = siblings + children
+    for name in [result['name']]: #+ result['/common/topic/alias']:
+        try:
+            #print result['sibling_s']
+            siblings_rel = [x['sibling'] for x in result['sibling_s']]
+            # flatten it 
+            siblings= [str(item) for sublist in siblings_rel for item in sublist if item!=result['name']]
+            #print result['name']
+            spouses = [x['spouse'] for x in result['spouse_s']]
+            spouses= [str(item) for sublist in spouses for item in sublist if item!=result['name']]
+            #print spouses
+            children = result['children']
+            handle_parents(output_fp_par,name, parents,siblings,spouses,children)
+            handle_spouses(output_fp_spo,name, parents,siblings,spouses,children)
+            handle_children(output_fp_chi,name, parents,siblings,spouses,children)
+            handle_siblings(output_fp_sib,name, parents,siblings,spouses,children)
+        except:
+            continue
 
-        positive_names = Set(parents)
-        negative_names = Set(others).difference(positive_names)
+def handle_parents(output, name, parents,siblings,spouses,children):
+    positive_names = Set(parents)
+    others = siblings + children + spouses
+    negative_names = Set(others).difference(positive_names)
+    write_to_file(output,name, positive_names, 1)
+    write_to_file(output,name, negative_names, 0)
 
-        write_to_file(name, positive_names, 1)
-        write_to_file(name, negative_names, 0)
+def handle_spouses(output, name, parents,siblings,spouses,children):
+    positive_names = Set(spouses)
+    others = siblings + children + parents
+    negative_names = Set(others).difference(positive_names)
+    write_to_file(output,name, positive_names, 1)
+    write_to_file(output,name, negative_names, 0)
+
+def handle_children(output, name, parents,siblings,spouses,children):
+    positive_names = Set(children)
+    others = siblings + parents + spouses
+    negative_names = Set(others).difference(positive_names)
+    write_to_file(output,name, positive_names, 1)
+    write_to_file(output,name, negative_names, 0)
+
+def handle_siblings(output, name, parents,siblings,spouses,children):
+    positive_names = Set(siblings)
+    others = children + parents + spouses
+    negative_names = Set(others).difference(positive_names)
+    write_to_file(output,name, positive_names, 1)
+    write_to_file(output,name, negative_names, 0)
 
 service_url = 'https://www.googleapis.com/freebase/v1/mqlread'
 query = [{'id': None,
           'name': None,
-          '/common/topic/alias': [],
           'parents':[],
           'children':[],
-          '/people/sibling_relationship/sibling':[],
-          'spouse_s': [{'spouse':[]}],#[{'spouse': None}],
+          'sibling_s':[{'sibling': [],"optional": "optional"}],
+          'spouse_s': [{'spouse':[],"optional": "optional"}],#[{'spouse': None}],
           'type': '/people/person'}]
 
 params = {
@@ -63,15 +94,18 @@ params = {
         'limit': LIMIT,
         'cursor': ''
 }
+#intermediate_cursor = 'eNpVj01Ow0AMhQ_DphGK6r_xeCxUcY9RFqMEUCVooknpggVnZxBISb2y9d73bI-fdZ2rs8ToeXYyAhjyxRGNmS1JGspl8gfoEWPQNqs5e17WL8df63xzGA7ntfidpT71h7ePsrgmRGHZicmv_UkDMEDUrtvYhEkFwo61aMhKm6j_LKUUbccaQ7MA-Xtjb-fFMUJEYN409vqYCKjYCAIAKvhqcFdjfxJV7rq81Lm9dWwbWYzy0m75a_27z2uLD4Zkw3B8Ti-joExaArW0CUHpB-5yU8w='
 url = service_url + '?' + urllib.urlencode(params)
 response = json.loads(urllib.urlopen(url).read())
-print response
+#print response
+#response['cursor'] = intermediate_cursor
 
 while 'cursor' in response and 'result' in response:
     for subject in response['result']:
-        print subject['/people/sibling_relationship/sibling']
-        handle_parent(subject)
+        handle_result(subject)
     print 'Fetching {0} people'.format(LIMIT)
     params['cursor'] = response['cursor']
     url = service_url + '?' + urllib.urlencode(params)
     response = json.loads(urllib.urlopen(url).read())
+
+
