@@ -3,11 +3,11 @@ import json
 import urllib
 from sets import Set
 
-OUTPUT_FNAME_PAR = 'freebase_parents'
-OUTPUT_FNAME_CHI = 'freebase_children'
-OUTPUT_FNAME_SPO = 'freebase_spouse'
-OUTPUT_FNAME_SIB = 'freebase_siblings'
-LIMIT = 500
+OUTPUT_FNAME_PAR = 'freebase_parents2'
+OUTPUT_FNAME_CHI = 'freebase_children2'
+OUTPUT_FNAME_SPO = 'freebase_spouse2'
+OUTPUT_FNAME_SIB = 'freebase_siblings2'
+LIMIT = 100
 output_fp_par = open(OUTPUT_FNAME_PAR, 'w')
 output_fp_chi = open(OUTPUT_FNAME_CHI, 'w')
 output_fp_spo = open(OUTPUT_FNAME_SPO, 'w')
@@ -29,26 +29,28 @@ def write_to_file(output, subject, people, label):
 
 # Callback to handle a single API response
 def handle_result(result):
-    # if founders not found, don't do anything
-    parents = result['parents']
-    if not parents:
-        return
+
     for name in [result['name']]: #+ result['/common/topic/alias']:
+        # Try catch for encoding errors
         try:
             #print result['sibling_s']
             siblings_rel = [x['sibling'] for x in result['sibling_s']]
             # flatten it 
-            siblings= [str(item) for sublist in siblings_rel for item in sublist if item!=result['name']]
+            siblings= [str(item).translate(None,'\t').strip() for sublist in siblings_rel for item in sublist if item!=result['name']]
             #print result['name']
             spouses = [x['spouse'] for x in result['spouse_s']]
-            spouses= [str(item) for sublist in spouses for item in sublist if item!=result['name']]
+            spouses= [str(item).translate(None,'\t').strip() for sublist in spouses for item in sublist if item!=result['name']]
             #print spouses
             children = result['children']
-            handle_parents(output_fp_par,name, parents,siblings,spouses,children)
-            handle_spouses(output_fp_spo,name, parents,siblings,spouses,children)
-            handle_children(output_fp_chi,name, parents,siblings,spouses,children)
-            handle_siblings(output_fp_sib,name, parents,siblings,spouses,children)
-        except:
+            children = [str(child).translate(None,'\t').strip() for child in children]
+            parents = result['parents']
+            parents = [str(parent).strip().translate(None,'\t') for parent in parents]
+            
+            handle_parents(output_fp_par,str(name).translate(None,'\t'), parents,siblings,spouses,children)
+            handle_spouses(output_fp_spo,str(name).translate(None,'\t'), parents,siblings,spouses,children)
+            handle_children(output_fp_chi,str(name).translate(None,'\t'), parents,siblings,spouses,children)
+            handle_siblings(output_fp_sib,str(name).translate(None,'\t'), parents,siblings,spouses,children)
+        except UnicodeEncodeError:
             continue
 
 def handle_parents(output, name, parents,siblings,spouses,children):
@@ -107,5 +109,4 @@ while 'cursor' in response and 'result' in response:
     params['cursor'] = response['cursor']
     url = service_url + '?' + urllib.urlencode(params)
     response = json.loads(urllib.urlopen(url).read())
-
 
